@@ -22,7 +22,7 @@ interface InovaFeatureFlagContextType {
   useInovaFlag: (key: string, defaultValue: FlagType) => FlagType;
 }
 
-interface InovaFeatureFlagOptions {
+export interface InovaFeatureFlagOptions {
   url?: string;
   autoRefetch?: boolean;
   cacheResults?: boolean;
