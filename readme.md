@@ -3,13 +3,13 @@
 inova-feature-flag em seu projeto React Native. Para isso, abra o terminal e navegue até a raiz do projeto. Em seguida, execute o seguinte comando:
 
 ```
-npm install inova-feature-flag
+npm install @inovaebiz/inova-feature-flag
 ```
 
 ou, se preferir usar o yarn:
 
 ```
-yarn add inova-feature-flag
+yarn add @inovaebiz/inova-feature-flag
 ```
 
 Isso instalará o pacote inova-feature-flag e suas dependências em seu projeto.
@@ -21,7 +21,7 @@ Agora que o pacote inova-feature-flag está instalado, você precisa configurá-
 Importar o InovaFeatureFlagProvider de inova-feature-flag e envolver seu aplicativo com ele, geralmente no nível mais alto do componente. Exemplo:
 
 ```
-import { InovaFeatureFlagProvider } from 'inova-feature-flag';
+import { InovaFeatureFlagProvider } from '@inovaebiz/inova-feature-flag';
 import App from './App';
 
 const MyApp = () => (
@@ -36,7 +36,7 @@ export default MyApp;
 Chamar o método config no InovaFeatureFlagProvider para configurar a chave e as opções de configuração para acessar as flags de recursos. Exemplo:
 
 ```
-import { useInovaFlag } from 'inova-feature-flag';
+import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
@@ -67,7 +67,7 @@ export default function App() {
 Agora que o InovaFeatureFlagProvider está configurado em seu aplicativo, você pode usar o hook useInovaFlag para acessar as flags de recursos em qualquer componente. Para fazer isso, importe o useInovaFlag de inova-feature-flag e chame-o com a chave da feature flag e o valor padrão, como no exemplo abaixo:
 
 ```
-import { useInovaFlag } from 'inova-feature-flag';
+import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
 
 const MyComponent = () => {
   const servicesEnabled = useInovaFlag('app:services:enabled', false);
@@ -85,7 +85,7 @@ const MyComponent = () => {
 Observe que, por padrão, o valor de retorno do useInovaFlag é uma boolean. No entanto, você pode especificar um valor padrão que seja uma string para indicar que a flag de recurso deve ser interpretada como uma string. Por exemplo:
 
 ```
-import { useInovaFlag } from 'inova-feature-flag';
+import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
 
 const MyComponent = () => {
   const theme = useInovaFlag('app:theme', 'light');
@@ -103,7 +103,7 @@ const MyComponent = () => {
 Se você quiser ter a tipagem forte das chaves de feature flag e seus tipos de valor, você pode usar o recurso de tipagem genérica do useInovaFlag. Para fazer isso, primeiro defina um tipo que descreva as chaves de feature flag e seus tipos de valor, como no exemplo abaixo:
 
 ```
-import { useInovaFlag } from 'inova-feature-flag';
+import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
 
 type FeatureFlagsKeys = {
   'app:services:enabled': boolean;

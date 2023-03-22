@@ -1,5 +1,10 @@
 import React, { createContext, useState, useEffect } from "react";
 
+const DEFAULT_API_URL = "https://inovaebiz.com.br/";
+const DEFAULT_CACHE_DURATION = 3600 * 24;
+const DEFAULT_CACHE_RESULTS = true;
+const DEFAULT_AUTO_REFETCH = false;
+
 type FlagType = boolean | string;
 
 interface FeatureFlag {
@@ -25,10 +30,10 @@ interface InovaFeatureFlagOptions {
 }
 
 const defaultOptions: InovaFeatureFlagOptions = {
-  url: "https://example.com/api/feature-flag",
-  autoRefetch: false,
-  cacheResults: true,
-  cacheDataForSeconds: 3600 * 24,
+  url: DEFAULT_API_URL,
+  autoRefetch: DEFAULT_AUTO_REFETCH,
+  cacheResults: DEFAULT_CACHE_RESULTS,
+  cacheDataForSeconds: DEFAULT_CACHE_DURATION,
 };
 
 export const InovaFeatureFlagContext =

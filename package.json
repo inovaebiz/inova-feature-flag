@@ -1,7 +1,6 @@
 {
-  "name": "inovafeatureflag",
+  "name": "@inovaebiz/inova-feature-flag",
   "displayName": "Inova Feature Flag",
-  "private": true,
   "sponsor": {
     "url": "https://inovaebiz.com.br/"
   },
