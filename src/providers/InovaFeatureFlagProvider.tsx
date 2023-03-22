@@ -39,7 +39,9 @@ const defaultOptions: InovaFeatureFlagOptions = {
 export const InovaFeatureFlagContext =
   createContext<InovaFeatureFlagContextType>({} as InovaFeatureFlagContextType);
 
-export const InovaFeatureFlagProvider: React.FC = ({ children }) => {
+export const InovaFeatureFlagProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const [headers, setHeaders] = useState<Headers>();
   const [options, setOptions] =
     useState<InovaFeatureFlagOptions>(defaultOptions);
