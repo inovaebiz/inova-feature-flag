@@ -1,24 +1,24 @@
 # Inova Feature Flag for React / React Native
 
-inova-feature-flag em seu projeto React Native. Para isso, abra o terminal e navegue até a raiz do projeto. Em seguida, execute o seguinte comando:
+Use inova-feature-flag in your React Native project. To do this, open the terminal and navigate to the root of your project. Then, execute the following command:
 
 ```
 npm install @inovaebiz/inova-feature-flag
 ```
 
-ou, se preferir usar o yarn:
+Or, if you prefer to use yarn:
 
 ```
 yarn add @inovaebiz/inova-feature-flag
 ```
 
-Isso instalará o pacote inova-feature-flag e suas dependências em seu projeto.
+This will install the inova-feature-flag package and its dependencies in your project.
 
-## Configuração
+## Configuration
 
-Agora que o pacote inova-feature-flag está instalado, você precisa configurá-lo em seu aplicativo. Para fazer isso, você precisa:
+Now that the inova-feature-flag package is installed, you need to configure it in your app. To do this, you need to:
 
-Importar o InovaFeatureFlagProvider de inova-feature-flag e envolver seu aplicativo com ele, geralmente no nível mais alto do componente. Exemplo:
+Import InovaFeatureFlagProvider from inova-feature-flag and wrap your app with it, usually at the highest level of the component. Example:
 
 ```
 import { InovaFeatureFlagProvider } from '@inovaebiz/inova-feature-flag';
@@ -33,7 +33,7 @@ const MyApp = () => (
 export default MyApp;
 ```
 
-Chamar o método config no InovaFeatureFlagProvider para configurar a chave e as opções de configuração para acessar as flags de recursos. Exemplo:
+Call the config method on InovaFeatureFlagProvider to set the key and configuration options to access the feature flags. Example:
 
 ```
 import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
@@ -62,9 +62,9 @@ export default function App() {
 }
 ```
 
-## Uso
+## Usage
 
-Agora que o InovaFeatureFlagProvider está configurado em seu aplicativo, você pode usar o hook useInovaFlag para acessar as flags de recursos em qualquer componente. Para fazer isso, importe o useInovaFlag de inova-feature-flag e chame-o com a chave da feature flag e o valor padrão, como no exemplo abaixo:
+Now that InovaFeatureFlagProvider is configured in your app, you can use the useInovaFlag hook to access the feature flags in any component. To do this, import useInovaFlag from inova-feature-flag and call it with the feature flag key and default value, as shown in the example below:
 
 ```
 import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
@@ -82,7 +82,7 @@ const MyComponent = () => {
 };
 ```
 
-Observe que, por padrão, o valor de retorno do useInovaFlag é uma boolean. No entanto, você pode especificar um valor padrão que seja uma string para indicar que a flag de recurso deve ser interpretada como uma string. Por exemplo:
+Note that by default, the return value of useInovaFlag is a boolean. However, you can specify a default value that is a string to indicate that the feature flag should be interpreted as a string. For example:
 
 ```
 import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
@@ -98,9 +98,9 @@ const MyComponent = () => {
     }
 ```
 
-## Tipagem
+## Typing
 
-Se você quiser ter a tipagem forte das chaves de feature flag e seus tipos de valor, você pode usar o recurso de tipagem genérica do useInovaFlag. Para fazer isso, primeiro defina um tipo que descreva as chaves de feature flag e seus tipos de valor, como no exemplo abaixo:
+If you want to have strong typing for the feature flag keys and their value types, you can use the useInovaFlag generic typing feature. To do this, first define a type that describes the feature flag keys and their value types, as shown in the example below:
 
 ```
 import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
@@ -125,21 +125,22 @@ const MyComponent = () => {
 };
 ```
 
-Neste exemplo, o tipo FeatureFlagsKeys define as chaves de feature flag e seus tipos de valor. Então, quando você usa o useInovaFlag, especifica FeatureFlagsKeys como o tipo genérico para ter a tipagem forte dessas chaves.
+In this example, the FeatureFlagsKeys type defines the feature flag keys and their value types. Then, when you use useInovaFlag, you specify FeatureFlagsKeys as the generic type to have strong typing for these keys.
 
-## Contribuindo
+## Contributing
 
-Este pacote é privado da organização Inovaebiz, mas adoraríamos ter sua contribuição! Se você deseja contribuir para este pacote, siga estas etapas:
+This package is private to the Inovaebiz organization, but we would love to have your contribution! If you want to contribute to this package, follow these steps:
 
-- Faça um fork deste repositório em sua conta do GitHub.
-- Crie um branch em seu fork para suas alterações.
-- Faça suas alterações e testes.
-- Envie um pull request para este repositório com suas alterações.
-- Roadmap
+- Fork this repository to your GitHub account.
+- Create a branch in your fork for your changes.
+- Make your changes and tests.
+- Submit a pull request to this repository with your changes.
 
-##### Aqui estão algumas das próximas features planejadas para este pacote:
+## Roadmap
 
-- Persistência de dados usando async storage ou MMKV, caso o usuário escolha a persistência em cache. O usuário poderá escolher que deseja persistência e inserir a instância dentro dos parâmetros personalizados do config. Exemplo:
+##### Here are some of the next planned features for this package:
+
+- Data persistence using async storage or MMKV, if the user chooses caching persistence. The user will be able to choose that they want persistence and insert the instance within the customized parameters of the config. Example:
 
 ```
 inovaflag.config('sdk_key', {
@@ -148,16 +149,16 @@ inovaflag.config('sdk_key', {
 });
 ```
 
-Isso permitiria que o pacote use o mecanismo de armazenamento desejado para persistir os dados das flags de recurso em cache.
+This would allow the package to use the desired storage engine to persist resource flag data in cache.
 
-## Considerações finais
+## Final considerations
 
-O pacote inova-feature-flag é uma maneira fácil de implementar as flags de recursos em seu projeto React Native. Seguindo as etapas de instalação e configuração, você pode acessar as flags de recurso em todo o seu aplicativo usando o useInovaFlag. Além disso, usando o recurso de tipagem genérica, você pode ter a tipagem forte das chaves de feature flag e seus tipos de valor, o que pode ajudar a evitar erros em tempo de execução.
+The inova-feature-flag package is an easy way to implement feature flags in your React Native project. By following the installation and configuration steps, you can access feature flags throughout your app using useInovaFlag. Additionally, by using the generic typing feature, you can have strong typing for the feature flag keys and their value types, which can help prevent runtime errors.
 
-## Autores
+## Authors
 
 [Vinicius Petrachin](https://github.com/viniciuspetrachin)
 
-## Licença
+## License
 
 MIT
