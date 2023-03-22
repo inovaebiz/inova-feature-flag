@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useMemo } from "react";
 
 const DEFAULT_API_URL = "https://inovaebiz.com.br/";
 const DEFAULT_CACHE_DURATION = 3600 * 24;
@@ -18,7 +18,6 @@ interface FeatureFlagResponse {
 }
 
 interface InovaFeatureFlagContextType {
-  config: (key: string, options?: InovaFeatureFlagOptions) => void;
   useInovaFlag: (key: string, defaultValue: FlagType) => FlagType;
 }
 
@@ -41,16 +40,18 @@ export const InovaFeatureFlagContext =
 
 export const InovaFeatureFlagProvider: React.FC<{
   children: React.ReactNode;
-}> = ({ children }) => {
-  const [headers, setHeaders] = useState<Headers>();
-  const [options, setOptions] =
-    useState<InovaFeatureFlagOptions>(defaultOptions);
+  sdkKey: string;
+  options?: InovaFeatureFlagOptions;
+}> = ({ children, sdkKey, options: userOptions }) => {
   const [flags, setFlags] = useState<Map<string, FlagType>>(new Map());
   const [lastFetchedAt, setLastFetchedAt] = useState<Date | null>(null);
 
+  const options = useMemo(() => userOptions ?? defaultOptions, [userOptions]);
+  const headers = new Headers({ Authorization: `Bearer ${sdkKey}` });
+
   const fetchFeatureFlags = async () => {
     if (!headers) {
-      return;
+      return new Error("No SDK key provided");
     }
 
     const response = await fetch(options.url!, {
@@ -67,16 +68,6 @@ export const InovaFeatureFlagProvider: React.FC<{
 
     setFlags(newFlags);
     setLastFetchedAt(new Date());
-  };
-
-  const config = (key: string, options?: InovaFeatureFlagOptions) => {
-    const newOptions = { ...defaultOptions, ...options };
-    setOptions(newOptions);
-    setHeaders(new Headers({ Authorization: `Bearer ${key}` }));
-
-    if (newOptions.autoRefetch) {
-      fetchFeatureFlags();
-    }
   };
 
   const useInovaFlag = (key: string, defaultValue: FlagType): FlagType => {
@@ -104,7 +95,7 @@ export const InovaFeatureFlagProvider: React.FC<{
   }, [options, lastFetchedAt]);
 
   return (
-    <InovaFeatureFlagContext.Provider value={{ config, useInovaFlag }}>
+    <InovaFeatureFlagContext.Provider value={{ useInovaFlag }}>
       {children}
     </InovaFeatureFlagContext.Provider>
   );

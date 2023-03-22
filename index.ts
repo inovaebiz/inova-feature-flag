@@ -10,19 +10,10 @@
  */
 export { useInovaFlag } from './src/hooks/useInovaFlag';
 /**
- * Função para configurar o sdk key da biblioteca Inova Feature Flag.
- * @param key O sdk key da biblioteca Inova Feature Flag.
- * @param options As opções de configuração. Opcional. Como por exemplo url
- * diferente para o ambiente de desenvolvimento ou produção da feature flag.
- * @example
- * const config = useInovaFlagConfig();
- * config('sdk-key', { url: 'https://feature-flag-url.com', autoRefetch: 
- * true });
- */
-export { useInovaFlagConfig } from './src/hooks/useInovaFlagConfig';
-/**
  * Provedor de contexto para as flags do Inova.
  * @param props As propriedades do provedor.
+ * @param props.children O componente filho.
+ * @param props.sdkKey A chave do SDK.
  * @returns O componente do provedor.
  */
 export { InovaFeatureFlagProvider } from './src/providers/InovaFeatureFlagProvider';
