@@ -2,13 +2,13 @@
 
 Use inova-feature-flag in your React Native project. To do this, open the terminal and navigate to the root of your project. Then, execute the following command:
 
-```
+```bash
 npm install @inovaebiz/inova-feature-flag
 ```
 
 Or, if you prefer to use yarn:
 
-```
+```bash
 yarn add @inovaebiz/inova-feature-flag
 ```
 
@@ -20,109 +20,96 @@ Now that the inova-feature-flag package is installed, you need to configure it i
 
 Import InovaFeatureFlagProvider from inova-feature-flag and wrap your app with it, usually at the highest level of the component. Example:
 
-```
-import { InovaFeatureFlagProvider } from '@inovaebiz/inova-feature-flag';
-import App from './App';
+```tsx
+import { InovaFeatureFlagProvider } from '@inovaebiz/inova-feature-flag'
+import App from './App'
 
 const MyApp = () => (
-  <InovaFeatureFlagProvider>
+  <InovaFeatureFlagProvider
+    sdkKey='your_sdk_key'
+    options={{
+      url: 'your_custom_url',
+    }}
+  >
     <App />
   </InovaFeatureFlagProvider>
-);
+)
 
-export default MyApp;
+export default MyApp
 ```
 
-Call the config method on InovaFeatureFlagProvider to set the key and configuration options to access the feature flags. Example:
+Remembering that the custom url you place has to bring data in this format:
 
-```
-import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
-
-export default function App() {
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    inovaflag.config('your_sdk_key');
-    setIsReady(true);
-  }, []);
-
-  if (!isReady) {
-    return null; // or a loading indicator
+```json
+{
+  "success": true,
+  "data": {
+    "featureFlags": [
+      {
+        "key": "app:services",
+        "value": true,
+        "description": "Enable services"
+      }
+    ]
   }
-
-  const servicesEnabled = useInovaFlag('app:services:enabled', false);
-
-  return (
-    <View>
-      {servicesEnabled && (
-        <Text>Services are enabled</Text>
-      )}
-    </View>
-  );
 }
 ```
+
+And it also has to be an api in post that receives a bearer token in authorization by the header with the obligatory sdkKey inside the provider.
 
 ## Usage
 
 Now that InovaFeatureFlagProvider is configured in your app, you can use the useInovaFlag hook to access the feature flags in any component. To do this, import useInovaFlag from inova-feature-flag and call it with the feature flag key and default value, as shown in the example below:
 
-```
-import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
+```tsx
+import { useInovaFlag } from '@inovaebiz/inova-feature-flag'
 
 const MyComponent = () => {
-  const servicesEnabled = useInovaFlag('app:services:enabled', false);
+  const servicesEnabled = useInovaFlag('app:services:enabled', false)
 
-  return (
-    <View>
-      {servicesEnabled && (
-        <Text>Services are enabled</Text>
-      )}
-    </View>
-  );
-};
+  return <View>{servicesEnabled && <Text>Services are enabled</Text>}</View>
+}
 ```
 
 Note that by default, the return value of useInovaFlag is a boolean. However, you can specify a default value that is a string to indicate that the feature flag should be interpreted as a string. For example:
 
-```
-import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
+```tsx
+import { useInovaFlag } from '@inovaebiz/inova-feature-flag'
 
 const MyComponent = () => {
-  const theme = useInovaFlag('app:theme', 'light');
+  const theme = useInovaFlag('app:theme', 'light')
 
   return (
     <View>
       <Text>The current theme is {theme}</Text>
     </View>
-    )
-    }
+  )
+}
 ```
 
 ## Typing
 
 If you want to have strong typing for the feature flag keys and their value types, you can use the useInovaFlag generic typing feature. To do this, first define a type that describes the feature flag keys and their value types, as shown in the example below:
 
-```
-import { useInovaFlag } from '@inovaebiz/inova-feature-flag';
+```tsx
+import { useInovaFlag } from '@inovaebiz/inova-feature-flag'
 
 type FeatureFlagsKeys = {
-  'app:services:enabled': boolean;
-  'app:theme': string;
-};
+  'app:services:enabled': boolean
+  'app:theme': string
+}
 
 const MyComponent = () => {
-  const servicesEnabled = useInovaFlag<FeatureFlagsKeys>('app:services:enabled', false);
-  const theme = useInovaFlag<FeatureFlagsKeys>('app:theme', 'light');
+  const servicesEnabled = useInovaFlag<FeatureFlagsKeys>('app:services:enabled', false)
+  const theme = useInovaFlag<FeatureFlagsKeys>('app:theme', 'light')
 
   return (
     <View>
-      {servicesEnabled && (
-        <Text>Services are enabled</Text>
-      )}
+      {servicesEnabled && <Text>Services are enabled</Text>}
       <Text>The current theme is {theme}</Text>
     </View>
-  );
-};
+  )
+}
 ```
 
 In this example, the FeatureFlagsKeys type defines the feature flag keys and their value types. Then, when you use useInovaFlag, you specify FeatureFlagsKeys as the generic type to have strong typing for these keys.
@@ -142,7 +129,7 @@ This package is private to the Inovaebiz organization, but we would love to have
 
 - Data persistence using async storage or MMKV, if the user chooses caching persistence. The user will be able to choose that they want persistence and insert the instance within the customized parameters of the config. Example:
 
-```
+```typescript
 inovaflag.config('sdk_key', {
   cacheEnabled: true,
   cacheInstance: mmkvStorage or asyncstorage,
