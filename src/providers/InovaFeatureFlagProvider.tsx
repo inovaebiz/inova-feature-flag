@@ -14,7 +14,10 @@ interface FeatureFlag {
 }
 
 interface FeatureFlagResponse {
-  featureFlags: FeatureFlag[]
+  success: boolean
+  data: {
+    featureFlags: FeatureFlag[]
+  }
 }
 
 interface InovaFeatureFlagContextType {
@@ -35,11 +38,6 @@ const defaultOptions: InovaFeatureFlagOptions = {
   cacheDataForSeconds: DEFAULT_CACHE_DURATION,
 }
 
-export interface IFlag {
-  key: string
-  value: FlagType
-}
-
 export const InovaFeatureFlagContext = createContext<InovaFeatureFlagContextType>({} as InovaFeatureFlagContextType)
 
 export const InovaFeatureFlagProvider: React.FC<{
@@ -47,7 +45,7 @@ export const InovaFeatureFlagProvider: React.FC<{
   sdkKey: string
   options?: InovaFeatureFlagOptions
 }> = ({ children, sdkKey, options: userOptions }) => {
-  const [flags, setFlags] = useState<IFlag[]>([])
+  const [flags, setFlags] = useState<FeatureFlag[]>([])
   const [lastFetchedAt, setLastFetchedAt] = useState<Date | null>(null)
 
   const options = useMemo(() => userOptions ?? defaultOptions, [userOptions])
@@ -65,10 +63,13 @@ export const InovaFeatureFlagProvider: React.FC<{
 
       const data = (await response.json()) as FeatureFlagResponse
 
-      setFlags(data.featureFlags)
-      setLastFetchedAt(new Date())
-
-      return data.featureFlags
+      if (data && data.success && data.data.featureFlags) {
+        setFlags(data.data.featureFlags)
+        setLastFetchedAt(new Date())
+        return data.data.featureFlags
+      } else {
+        return []
+      }
     } catch {
       return []
     }
@@ -92,10 +93,10 @@ export const InovaFeatureFlagProvider: React.FC<{
       if (elapsedTime > cacheDuration) {
         fetchFeatureFlags()
       }
-    } else {
+    } else if (flags.length < 1 && lastFetchedAt === null) {
       fetchFeatureFlags()
     }
-  }, [options, lastFetchedAt, fetchFeatureFlags])
+  }, [options, lastFetchedAt, fetchFeatureFlags, flags])
 
   return <InovaFeatureFlagContext.Provider value={{ useInovaFlag }}>{children}</InovaFeatureFlagContext.Provider>
 }
