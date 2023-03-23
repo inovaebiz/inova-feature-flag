@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useMemo } from 'react'
+import React, { createContext, useState, useEffect, useMemo, useCallback } from 'react'
 
 const DEFAULT_API_URL = 'https://inovaebiz.com.br/'
 const DEFAULT_CACHE_DURATION = 3600 * 24
@@ -46,9 +46,10 @@ export const InovaFeatureFlagProvider: React.FC<{
   const [lastFetchedAt, setLastFetchedAt] = useState<Date | null>(null)
 
   const options = useMemo(() => userOptions ?? defaultOptions, [userOptions])
-  const headers = new Headers({ Authorization: `Bearer ${sdkKey}` })
 
-  const fetchFeatureFlags = async () => {
+  const fetchFeatureFlags = useCallback(async () => {
+    const headers = new Headers({ Authorization: `Bearer ${sdkKey}` })
+
     if (!headers) {
       return new Error('No SDK key provided')
     }
@@ -69,17 +70,21 @@ export const InovaFeatureFlagProvider: React.FC<{
     setLastFetchedAt(new Date())
 
     return newFlags
-  }
+  }, [options.url, sdkKey])
 
   const useInovaFlag = (key: string, defaultValue: FlagType): FlagType => {
     const [value, setValue] = useState(defaultValue)
 
     useEffect(() => {
       const newValue = flags.get(key)
-      if (newValue !== undefined) {
+      if (typeof newValue !== typeof defaultValue) {
+        setValue(defaultValue)
+      } else if (newValue !== undefined) {
         setValue(newValue)
+      } else {
+        setValue(defaultValue)
       }
-    }, [flags, key])
+    }, [defaultValue, key])
 
     return value
   }
@@ -92,8 +97,10 @@ export const InovaFeatureFlagProvider: React.FC<{
       if (elapsedTime > cacheDuration) {
         fetchFeatureFlags()
       }
+    } else {
+      fetchFeatureFlags()
     }
-  }, [options, lastFetchedAt])
+  }, [options, lastFetchedAt, fetchFeatureFlags])
 
   return <InovaFeatureFlagContext.Provider value={{ useInovaFlag }}>{children}</InovaFeatureFlagContext.Provider>
 }
