@@ -1,23 +1,23 @@
 {
-  "include": ["src/**/*", "index.js"],
-  "exclude": [
-    "node_modules",
-    "babel.config.js",
-    "metro.config.js",
-    "jest.config.js"
-  ],
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"],
   "compilerOptions": {
-    "target": "esnext",
     "module": "esnext",
-    "lib": ["esnext", "dom"],
-    "jsx": "react-native",
+    "lib": ["dom", "esnext"],
+    "importHelpers": true,
+    "declaration": true,
+    "sourceMap": true,
+    "rootDir": "./src",
+    "outDir": "./dist/esm",
     "strict": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["src/*"]
-    }
+    "jsx": "react",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   }
 }

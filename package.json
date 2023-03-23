@@ -14,13 +14,29 @@
       "url": "https://github.com/viniciuspetrachin"
     }
   ],
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "O Inova Feature Flag é uma biblioteca para React e React Native que permite configurar e acessar flags de recursos em seu aplicativo. Com ela, você pode facilmente definir as flags de recursos em um único lugar e acessá-las em todo o seu aplicativo usando um simples hook. Além disso, a biblioteca oferece recursos para cache de dados, permitindo que você escolha entre async storage ou MMKV como método de armazenamento. O Inova Feature Flag é mantido pela Inova e-Business para seus projetos internos.",
-  "main": "index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "scripts": {
-    "build": "babel src --out-dir lib --extensions \".ts,.tsx\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
+    "lint": "eslint \"{**/*,*}.{js,ts,jsx,tsx}\"",
+    "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts,jsx,tsx}\"",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run prettier && npm run lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gapon2401/my-react-typescript-package.git"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "keywords": [
     "react",
     "react-native",
@@ -32,25 +48,18 @@
   ],
   "author": "Vinicius Petrachin",
   "license": "MIT",
-  "dependencies": {
-    "react": "^16.8.0"
-  },
   "devDependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.3",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-typescript": "^7.21.0",
-    "@types/react": "^16.9.0",
-    "typescript": "^3.5.3"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env",
-      "@babel/preset-typescript"
-    ],
-    "plugins": [
-      "@babel/plugin-proposal-class-properties"
-    ]
+    "@types/react": "^18.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.8.6",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "typescript": "^4.7.3"
   }
 }

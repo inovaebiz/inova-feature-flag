@@ -1,15 +1,15 @@
-import { useContext } from 'react';
-import { InovaFeatureFlagContext } from '../providers/InovaFeatureFlagProvider';
+import { useContext } from 'react'
+import { InovaFeatureFlagContext } from '../providers/InovaFeatureFlagProvider'
 
-type FeatureFlagValue = boolean | string;
+type FeatureFlagValue = boolean | string
 
-type FeatureFlagRecord = Record<string, FeatureFlagValue>;
+type FeatureFlagRecord = Record<string, FeatureFlagValue>
 
 export function useInovaFlag<T extends FeatureFlagRecord>(
   key: keyof T,
-  defaultValue: FeatureFlagValue
+  defaultValue: FeatureFlagValue,
 ): FeatureFlagValue {
-  const { useInovaFlag: useFlag } = useContext(InovaFeatureFlagContext);
+  const { useInovaFlag: useFlag } = useContext(InovaFeatureFlagContext)
 
-  return useFlag(key as string, defaultValue);
+  return useFlag(key as string, defaultValue)
 }
