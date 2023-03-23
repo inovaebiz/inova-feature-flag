@@ -35,6 +35,11 @@ const defaultOptions: InovaFeatureFlagOptions = {
   cacheDataForSeconds: DEFAULT_CACHE_DURATION,
 }
 
+export interface IFlag {
+  key: string
+  value: FlagType
+}
+
 export const InovaFeatureFlagContext = createContext<InovaFeatureFlagContextType>({} as InovaFeatureFlagContextType)
 
 export const InovaFeatureFlagProvider: React.FC<{
@@ -42,14 +47,13 @@ export const InovaFeatureFlagProvider: React.FC<{
   sdkKey: string
   options?: InovaFeatureFlagOptions
 }> = ({ children, sdkKey, options: userOptions }) => {
-  const [flags, setFlags] = useState<Map<string, FlagType>>(new Map())
+  const [flags, setFlags] = useState<IFlag[]>([])
   const [lastFetchedAt, setLastFetchedAt] = useState<Date | null>(null)
 
   const options = useMemo(() => userOptions ?? defaultOptions, [userOptions])
+  const headers = new Headers({ Authorization: `Bearer ${sdkKey}` })
 
   const fetchFeatureFlags = useCallback(async () => {
-    const headers = new Headers({ Authorization: `Bearer ${sdkKey}` })
-
     if (!headers) {
       return new Error('No SDK key provided')
     }
@@ -61,29 +65,21 @@ export const InovaFeatureFlagProvider: React.FC<{
 
       const data = (await response.json()) as FeatureFlagResponse
 
-      const newFlags = new Map<string, FlagType>()
-      data.featureFlags.forEach((flag) => {
-        newFlags.set(flag.key, flag.value)
-      })
-
-      setFlags(newFlags)
+      setFlags(data.featureFlags)
       setLastFetchedAt(new Date())
 
-      return newFlags
+      return data.featureFlags
     } catch {
-      const newFlags = new Map<string, FlagType>()
-      return newFlags
+      return []
     }
-  }, [options.url, sdkKey])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const useInovaFlag = useCallback(
     (key: string, defaultValue: FlagType): FlagType => {
-      const value = flags.get(key)
+      const value = flags.find((flag) => flag.key === key)?.value
 
-      if (typeof value !== typeof defaultValue) {
-        return defaultValue
-      }
-      return value ?? defaultValue ?? false
+      return value ?? defaultValue
     },
     [flags],
   )
