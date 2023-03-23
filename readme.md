@@ -146,6 +146,11 @@ The inova-feature-flag package is an easy way to implement feature flags in your
 
 [Vinicius Petrachin](https://github.com/viniciuspetrachin)
 
+## Sponsors
+
+[Inova e-Business](https://www.inovaebiz.com.br/)
+Inova e-Business is a software factory that develops customized systems, apps and e-commerce. For more than 10 years delivering the most innovative technologies and solutions.
+
 ## License
 
 MIT
