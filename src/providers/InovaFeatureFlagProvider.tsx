@@ -76,22 +76,17 @@ export const InovaFeatureFlagProvider: React.FC<{
     }
   }, [options.url, sdkKey])
 
-  const useInovaFlag = (key: string, defaultValue: FlagType): FlagType => {
-    const [value, setValue] = useState(defaultValue)
+  const useInovaFlag = useCallback(
+    (key: string, defaultValue: FlagType): FlagType => {
+      const value = flags.get(key)
 
-    useEffect(() => {
-      const newValue = flags.get(key)
-      if (typeof newValue !== typeof defaultValue) {
-        setValue(defaultValue)
-      } else if (newValue !== undefined) {
-        setValue(newValue)
-      } else {
-        setValue(defaultValue)
+      if (typeof value !== typeof defaultValue) {
+        return defaultValue
       }
-    }, [defaultValue, key])
-
-    return value
-  }
+      return value ?? defaultValue ?? false
+    },
+    [flags],
+  )
 
   useEffect(() => {
     if (options.autoRefetch && lastFetchedAt) {
