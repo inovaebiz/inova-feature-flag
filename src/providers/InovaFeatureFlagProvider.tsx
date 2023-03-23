@@ -5,7 +5,7 @@ const DEFAULT_CACHE_DURATION = 3600 * 24
 const DEFAULT_CACHE_RESULTS = true
 const DEFAULT_AUTO_REFETCH = false
 
-type FlagType = boolean | string
+type FlagType = boolean
 
 interface FeatureFlag {
   key: string
@@ -53,23 +53,27 @@ export const InovaFeatureFlagProvider: React.FC<{
     if (!headers) {
       return new Error('No SDK key provided')
     }
+    try {
+      const response = await fetch(options.url!, {
+        method: 'POST',
+        headers,
+      })
 
-    const response = await fetch(options.url!, {
-      method: 'POST',
-      headers,
-    })
+      const data = (await response.json()) as FeatureFlagResponse
 
-    const data = (await response.json()) as FeatureFlagResponse
+      const newFlags = new Map<string, FlagType>()
+      data.featureFlags.forEach((flag) => {
+        newFlags.set(flag.key, flag.value)
+      })
 
-    const newFlags = new Map<string, FlagType>()
-    data.featureFlags.forEach((flag) => {
-      newFlags.set(flag.key, flag.value)
-    })
+      setFlags(newFlags)
+      setLastFetchedAt(new Date())
 
-    setFlags(newFlags)
-    setLastFetchedAt(new Date())
-
-    return newFlags
+      return newFlags
+    } catch {
+      const newFlags = new Map<string, FlagType>()
+      return newFlags
+    }
   }, [options.url, sdkKey])
 
   const useInovaFlag = (key: string, defaultValue: FlagType): FlagType => {
