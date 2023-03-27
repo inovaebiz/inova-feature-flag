@@ -14,7 +14,7 @@
       "url": "https://github.com/viniciuspetrachin"
     }
   ],
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "O Inova Feature Flag é uma biblioteca para React e React Native que permite configurar e acessar flags de recursos em seu aplicativo. Com ela, você pode facilmente definir as flags de recursos em um único lugar e acessá-las em todo o seu aplicativo usando um simples hook. Além disso, a biblioteca oferece recursos para cache de dados, permitindo que você escolha entre async storage ou MMKV como método de armazenamento. O Inova Feature Flag é mantido pela Inova e-Business para seus projetos internos.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
