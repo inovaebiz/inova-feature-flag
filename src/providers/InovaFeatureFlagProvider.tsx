@@ -47,6 +47,7 @@ export const InovaFeatureFlagProvider: React.FC<{
 }> = ({ children, sdkKey, options: userOptions }) => {
   const [flags, setFlags] = useState<FeatureFlag[]>([])
   const [lastFetchedAt, setLastFetchedAt] = useState<Date | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const options = useMemo(() => userOptions ?? defaultOptions, [userOptions])
   const headers = new Headers({ Authorization: `Bearer ${sdkKey}` })
@@ -63,6 +64,8 @@ export const InovaFeatureFlagProvider: React.FC<{
 
       const data = (await response.json()) as FeatureFlagResponse
 
+      setIsLoading(false)
+
       if (data && data.success && data.data.featureFlags) {
         setFlags(data.data.featureFlags)
         setLastFetchedAt(new Date())
@@ -78,16 +81,20 @@ export const InovaFeatureFlagProvider: React.FC<{
 
   const useInovaFlag = useCallback(
     (key: string, defaultValue: FlagType): FlagType => {
+      if (isLoading) {
+        return defaultValue
+      }
+
       const value = flags.find((flag) => flag.key === key)?.value
 
       if (typeof value !== typeof defaultValue) {
-        console.warn(`Flag ${key} is of type ${typeof value} but you are trying to use it as ${typeof defaultValue}`)
+        console.log(`⚠️ Flag ${key} is of type ${typeof value} but you are trying to use it as ${typeof defaultValue}`)
         return defaultValue
       }
 
       return value ?? defaultValue
     },
-    [flags],
+    [flags, isLoading],
   )
 
   useEffect(() => {
