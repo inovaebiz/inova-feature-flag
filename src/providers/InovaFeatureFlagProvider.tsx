@@ -5,7 +5,7 @@ const DEFAULT_CACHE_DURATION = 3600 * 24
 const DEFAULT_CACHE_RESULTS = true
 const DEFAULT_AUTO_REFETCH = false
 
-type FlagType = boolean
+export type FlagType = boolean | string | number | string[] | number[] | boolean[]
 
 interface FeatureFlag {
   key: string
@@ -79,6 +79,11 @@ export const InovaFeatureFlagProvider: React.FC<{
   const useInovaFlag = useCallback(
     (key: string, defaultValue: FlagType): FlagType => {
       const value = flags.find((flag) => flag.key === key)?.value
+
+      if (typeof value !== typeof defaultValue) {
+        console.warn(`Flag ${key} is of type ${typeof value} but you are trying to use it as ${typeof defaultValue}`)
+        return defaultValue
+      }
 
       return value ?? defaultValue
     },
