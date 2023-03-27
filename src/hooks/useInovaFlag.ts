@@ -1,7 +1,7 @@
 import { useContext } from 'react'
-import { InovaFeatureFlagContext } from '../providers/InovaFeatureFlagProvider'
+import { FlagType, InovaFeatureFlagContext } from '../providers/InovaFeatureFlagProvider'
 
-type FeatureFlagValue = boolean
+type FeatureFlagValue = FlagType
 
 type FeatureFlagRecord = Record<string, FeatureFlagValue>
 
