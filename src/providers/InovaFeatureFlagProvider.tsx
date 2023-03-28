@@ -63,17 +63,17 @@ export const InovaFeatureFlagProvider: React.FC<{
       })
 
       const data = (await response.json()) as FeatureFlagResponse
-
-      setIsLoading(false)
-
       if (data && data.success && data.data.featureFlags) {
         setFlags(data.data.featureFlags)
         setLastFetchedAt(new Date())
+        setIsLoading(false)
         return data.data.featureFlags
       } else {
+        setIsLoading(false)
         return []
       }
     } catch {
+      setIsLoading(false)
       return []
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,8 +87,8 @@ export const InovaFeatureFlagProvider: React.FC<{
 
       const value = flags.find((flag) => flag.key === key)?.value
 
-      if (typeof value !== typeof defaultValue) {
-        console.log(`⚠️ Flag ${key} is of type ${typeof value} but you are trying to use it as ${typeof defaultValue}`)
+      if (typeof value !== 'undefined' && typeof value !== typeof defaultValue && !isLoading && flags.length > 0) {
+        console.log(` ⚠️ Flag ${key} is of type ${typeof value} but you are trying to use it as ${typeof defaultValue}`)
         return defaultValue
       }
 
